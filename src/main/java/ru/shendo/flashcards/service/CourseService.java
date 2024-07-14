@@ -1,22 +1,19 @@
 package ru.shendo.flashcards.service;
 
-import jakarta.transaction.Transactional;
-import org.springframework.stereotype.Service;
-import ru.shendo.flashcards.entity.Course;
-import ru.shendo.flashcards.repository.CourseRepository;
+import ru.shendo.flashcards.dto.CourseDto;
 
-@Service
-@Transactional
-public class CourseService {
+import java.util.List;
 
-    public final CourseRepository courseRepository;
+public interface CourseService {
 
-    public CourseService(CourseRepository courseRepository) {
-        this.courseRepository = courseRepository;
-    }
+    CourseDto createCourse(CourseDto courseDto);
 
-    public Course findById(Long id) {
-        return courseRepository.findById(id).get();
-    }
+    CourseDto findCourseById(Long courseId);
+
+    List<CourseDto> findAllCourses();
+
+    CourseDto updateCourse(Long courseId, CourseDto courseDto);
+
+    void deleteCourse(Long courseId);
 
 }

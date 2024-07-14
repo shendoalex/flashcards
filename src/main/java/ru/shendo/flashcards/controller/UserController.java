@@ -3,22 +3,22 @@ package ru.shendo.flashcards.controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import ru.shendo.flashcards.entity.User;
-import ru.shendo.flashcards.service.UserService;
+import ru.shendo.flashcards.entity.UserEntity;
+import ru.shendo.flashcards.service.UserServiceImpl;
 
 @RestController
 @RequestMapping("/user")
 public class UserController {
 
-    private final UserService userService;
+    private final UserServiceImpl userServiceImpl;
 
-    public UserController(UserService userService) {
-        this.userService = userService;
+    public UserController(UserServiceImpl userServiceImpl) {
+        this.userServiceImpl = userServiceImpl;
     }
 
     @GetMapping("/id")
-    public User findById() {
-        return userService.findById(1L);
+    public UserEntity findById() {
+        return userServiceImpl.findById(1L);
     }
 
 }

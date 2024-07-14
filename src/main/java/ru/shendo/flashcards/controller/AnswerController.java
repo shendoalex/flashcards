@@ -1,22 +1,24 @@
 package ru.shendo.flashcards.controller;
 
+import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import ru.shendo.flashcards.entity.Answer;
-import ru.shendo.flashcards.service.AnswerService;
+import ru.shendo.flashcards.dto.AnswerDto;
+import ru.shendo.flashcards.service.AnswerServiceImpl;
 
 @RestController
 @RequestMapping("/answer")
+@RequiredArgsConstructor
 public class AnswerController {
 
-    private final AnswerService answerService;
+    private final AnswerServiceImpl answerServiceImpl;
 
-    public AnswerController(AnswerService answerService) {
-        this.answerService = answerService;
-    }
 
-    public Answer findById() {
-        return answerService.findById(1L);
+    // path variable применить
+    @GetMapping("/id")
+    public AnswerDto findById() {
+        return answerServiceImpl.findById(1L);
     }
 
 }

@@ -1,22 +1,19 @@
 package ru.shendo.flashcards.service;
 
-import jakarta.transaction.Transactional;
-import org.springframework.stereotype.Repository;
-import ru.shendo.flashcards.entity.User;
-import ru.shendo.flashcards.repository.UserRepository;
+import ru.shendo.flashcards.dto.UserDto;
 
-@Repository
-@Transactional
-public class UserService {
+import java.util.List;
 
-    public final UserRepository userRepository;
+public interface UserService {
 
-    public UserService(UserRepository userRepository) {
-        this.userRepository = userRepository;
-    }
+    UserDto createUser(UserDto userDto);
 
-    public User findById(Long id) {
-        return userRepository.findById(id).get();
-    }
+    UserDto findUserById(Long userId);
+
+    List<UserDto> findAllUsers();
+
+    UserDto updateUser(Long userId, UserDto userDto);
+
+    void deleteUser(Long userId);
 
 }
