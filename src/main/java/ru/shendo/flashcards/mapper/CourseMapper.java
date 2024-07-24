@@ -8,10 +8,8 @@ import ru.shendo.flashcards.entity.CourseEntity;
 @Mapper(componentModel = "spring")
 public interface CourseMapper {
 
-    @Mapping(source = "owner.id", target = "ownerId")
     CourseDto courseEntityToDto(CourseEntity courseEntity);
 
-    @Mapping(source = "ownerId", target = "owner.id")
     CourseEntity courseDtoToEntity(CourseDto courseDto);
 
 }

@@ -10,6 +10,8 @@ import ru.shendo.flashcards.repository.AnswerRepository;
 import ru.shendo.flashcards.exception.EntityNotFoundException;
 import ru.shendo.flashcards.exception.ExceptionMessage;
 
+import java.util.List;
+
 @Service
 @Transactional
 @RequiredArgsConstructor
@@ -30,4 +32,28 @@ public class AnswerServiceImpl implements AnswerService {
     }
 
 
+    @Override
+    public AnswerDto createAnswer(AnswerDto answerDto) {
+        return null;
+    }
+
+    @Override
+    public AnswerDto findAnswerById(Long employeeId) {
+        return null;
+    }
+
+    @Override
+    public List<AnswerDto> findAllAnswers() {
+        return List.of();
+    }
+
+    @Override
+    public AnswerDto updateAnswer(Long answerId, AnswerDto updatedAnswerDto) {
+        return null;
+    }
+
+    @Override
+    public void deleteAnswer(Long AnswerId) {
+
+    }
 }

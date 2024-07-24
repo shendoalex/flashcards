@@ -19,6 +19,7 @@ import lombok.ToString;
 import lombok.experimental.FieldDefaults;
 
 import java.util.Collection;
+import java.util.List;
 
 @Entity
 @Table(name = "course", schema = "flashcards", catalog = "postgres")
@@ -46,6 +47,6 @@ public class CourseEntity {
     UserEntity owner;
 
     @OneToMany(mappedBy = "course")
-    Collection<QuestionEntity> questions;
+    List<QuestionEntity> questions;
 
 }

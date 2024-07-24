@@ -41,7 +41,7 @@ public class AnswerEntity {
     String answer;
 
     @Column(name = "answer_order")
-    BigInteger answerOrder;
+    Integer answerOrder;
 
     @ManyToOne
     @JoinColumn(name = "question_id", referencedColumnName = "id")

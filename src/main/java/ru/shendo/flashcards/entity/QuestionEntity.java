@@ -19,6 +19,7 @@ import lombok.ToString;
 import lombok.experimental.FieldDefaults;
 
 import java.util.Collection;
+import java.util.List;
 
 @Entity
 @Table(name = "question", schema = "flashcards", catalog = "postgres")
@@ -45,7 +46,7 @@ public class QuestionEntity {
     boolean completed;
 
     @OneToMany(mappedBy = "question")
-    Collection<AnswerEntity> answers;
+    List<AnswerEntity> answers;
 
     @ManyToOne
     @JoinColumn(name = "course_id", referencedColumnName = "id", nullable = false)
