@@ -1,22 +1,23 @@
 package ru.shendo.flashcards.service;
 
-import jakarta.transaction.Transactional;
-import org.springframework.stereotype.Service;
+import com.fasterxml.jackson.databind.JsonNode;
 import ru.shendo.flashcards.entity.Answer;
-import ru.shendo.flashcards.repository.AnswerRepository;
 
-@Service
-@Transactional
-public class AnswerService {
+import java.util.Collection;
+import java.util.List;
+import java.util.Optional;
 
-    public final AnswerRepository answerRepository;
+public interface AnswerService {
+    List<Answer> getList();
 
-    public AnswerService(AnswerRepository answerRepository) {
-        this.answerRepository = answerRepository;
-    }
+    Optional<Answer> getOne(Long id);
 
-    public Answer findById(Long id) {
-        return answerRepository.findById(id).get();
-    }
+    List<Answer> getMany(Collection<Long> ids);
+
+    Answer create(Answer dto);
+
+    Answer patch(Answer id, JsonNode patchNode);
+
+    void delete(Answer id);
 
 }

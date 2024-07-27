@@ -1,7 +1,5 @@
 package ru.shendo.flashcards.entity;
 
-import jakarta.persistence.Basic;
-import jakarta.persistence.Cacheable;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -11,15 +9,16 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
+import lombok.ToString;
+import lombok.experimental.FieldDefaults;
 
-import java.util.Collection;
-import java.util.Objects;
+import java.util.List;
 
 @Entity
 @Table(name = "course", schema = "flashcards", catalog = "postgres")
@@ -27,45 +26,26 @@ import java.util.Objects;
 @AllArgsConstructor
 @Getter
 @Setter
-@Cacheable
-@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@ToString(onlyExplicitlyIncluded = true)
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class Course {
 
     @Id
     @Column(name = "id")
+    @EqualsAndHashCode.Include
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    Long id;
 
-    @Basic
+    @ToString.Include
     @Column(name = "course_name")
-    private String name;
-
-    @Basic
-    @Column(name = "owner_id")
-    private Long ownerId;
+    String courseName;
 
     @ManyToOne
-    @JoinColumn(name = "owner_id", referencedColumnName = "id", nullable = false)
-    private User user;
+    @JoinColumn(name = "owner_id", referencedColumnName = "id")
+    User courseOwner;
 
     @OneToMany(mappedBy = "course")
-    private Collection<Card> cards;
+    List<Question> courseQuestions;
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Course course = (Course) o;
-        return Objects.equals(id, course.id);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hashCode(id);
-    }
-
-    @Override
-    public String toString() {
-        return name;
-    }
 }

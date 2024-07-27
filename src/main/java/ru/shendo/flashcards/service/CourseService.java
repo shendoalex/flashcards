@@ -1,22 +1,23 @@
 package ru.shendo.flashcards.service;
 
-import jakarta.transaction.Transactional;
-import org.springframework.stereotype.Service;
+import com.fasterxml.jackson.databind.JsonNode;
 import ru.shendo.flashcards.entity.Course;
-import ru.shendo.flashcards.repository.CourseRepository;
 
-@Service
-@Transactional
-public class CourseService {
+import java.util.Collection;
+import java.util.List;
+import java.util.Optional;
 
-    public final CourseRepository courseRepository;
+public interface CourseService {
+    List<Course> getList();
 
-    public CourseService(CourseRepository courseRepository) {
-        this.courseRepository = courseRepository;
-    }
+    Optional<Course> getOne(Long id);
 
-    public Course findById(Long id) {
-        return courseRepository.findById(id).get();
-    }
+    List<Course> getMany(Collection<Long> ids);
+
+    Course create(Course dto);
+
+    Course patch(Course id, JsonNode patchNode);
+
+    void delete(Course id);
 
 }
