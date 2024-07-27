@@ -17,8 +17,6 @@ import lombok.Setter;
 import lombok.ToString;
 import lombok.experimental.FieldDefaults;
 
-import java.math.BigInteger;
-
 @Entity
 @Table(name = "answer", schema = "flashcards", catalog = "postgres")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -28,7 +26,7 @@ import java.math.BigInteger;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @ToString(onlyExplicitlyIncluded = true)
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class AnswerEntity {
+public class Answer {
 
     @Id
     @Column(name = "id")
@@ -38,13 +36,13 @@ public class AnswerEntity {
 
     @Column(name = "answer")
     @ToString.Include
-    String answer;
+    String answerText;
 
     @Column(name = "answer_order")
     Integer answerOrder;
 
     @ManyToOne
     @JoinColumn(name = "question_id", referencedColumnName = "id")
-    QuestionEntity question;
+    Question answerQuestion;
 
 }

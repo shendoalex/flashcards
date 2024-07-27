@@ -1,49 +1,49 @@
 package ru.shendo.flashcards.service;
 
-import jakarta.transaction.Transactional;
+import com.fasterxml.jackson.databind.JsonNode;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import ru.shendo.flashcards.dto.CourseDto;
-import ru.shendo.flashcards.entity.CourseEntity;
+import ru.shendo.flashcards.entity.Course;
 import ru.shendo.flashcards.repository.CourseRepository;
 
+import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 
+@RequiredArgsConstructor
 @Service
-@Transactional
 public class CourseServiceImpl implements CourseService {
 
-    public final CourseRepository courseRepository;
+    private final CourseRepository courseRepository;
 
-    public CourseServiceImpl(CourseRepository courseRepository) {
-        this.courseRepository = courseRepository;
-    }
-
-    public CourseEntity findById(Long id) {
-        return courseRepository.findById(id).get();
+    @Override
+    public List<Course> getList() {
+        return courseRepository.findAll();
     }
 
     @Override
-    public CourseDto createCourse(CourseDto courseDto) {
-        return null;
+    public Optional<Course> getOne(Long id) {
+        return courseRepository.findById(id);
     }
 
     @Override
-    public CourseDto findCourseById(Long courseId) {
-        return null;
+    public List<Course> getMany(Collection<Long> ids) {
+        return courseRepository.findAllById(ids);
     }
 
     @Override
-    public List<CourseDto> findAllCourses() {
-        return List.of();
+    public Course create(Course dto) {
+        return courseRepository.save(dto);
     }
 
     @Override
-    public CourseDto updateCourse(Long courseId, CourseDto courseDto) {
-        return null;
+    public Course patch(Course id, JsonNode patchNode) {
+        return courseRepository.save(id);
     }
 
     @Override
-    public void deleteCourse(Long courseId) {
-
+    public void delete(Course id) {
+        courseRepository.delete(id);
     }
+
 }

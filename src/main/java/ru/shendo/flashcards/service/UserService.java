@@ -1,19 +1,23 @@
 package ru.shendo.flashcards.service;
 
-import ru.shendo.flashcards.dto.UserDto;
+import com.fasterxml.jackson.databind.JsonNode;
+import ru.shendo.flashcards.entity.User;
 
+import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 
 public interface UserService {
+    List<User> getList();
 
-    UserDto createUser(UserDto userDto);
+    Optional<User> getOne(Long id);
 
-    UserDto findUserById(Long userId);
+    List<User> getMany(Collection<Long> ids);
 
-    List<UserDto> findAllUsers();
+    User create(User dto);
 
-    UserDto updateUser(Long userId, UserDto userDto);
+    User patch(User id, JsonNode patchNode);
 
-    void deleteUser(Long userId);
+    void delete(User id);
 
 }

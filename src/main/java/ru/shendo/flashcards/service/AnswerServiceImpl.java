@@ -1,59 +1,49 @@
 package ru.shendo.flashcards.service;
 
-
+import com.fasterxml.jackson.databind.JsonNode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import ru.shendo.flashcards.dto.AnswerDto;
-import ru.shendo.flashcards.entity.AnswerEntity;
+import ru.shendo.flashcards.entity.Answer;
 import ru.shendo.flashcards.repository.AnswerRepository;
-import ru.shendo.flashcards.exception.EntityNotFoundException;
-import ru.shendo.flashcards.exception.ExceptionMessage;
 
+import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 
-@Service
-@Transactional
 @RequiredArgsConstructor
+@Service
 public class AnswerServiceImpl implements AnswerService {
 
     private final AnswerRepository answerRepository;
 
-    @Transactional(readOnly = true)
-    public AnswerDto findById(Long id) {
-
-        AnswerEntity answerEntity = answerRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException(ExceptionMessage.ANSWER_NOT_EXIST));
-
-        return AnswerDto.builder()
-                .answer("answer")
-                .answerOrder(1)
-                .build();
-    }
-
-
     @Override
-    public AnswerDto createAnswer(AnswerDto answerDto) {
-        return null;
+    public List<Answer> getList() {
+        return answerRepository.findAll();
     }
 
     @Override
-    public AnswerDto findAnswerById(Long employeeId) {
-        return null;
+    public Optional<Answer> getOne(Long id) {
+        return answerRepository.findById(id);
     }
 
     @Override
-    public List<AnswerDto> findAllAnswers() {
-        return List.of();
+    public List<Answer> getMany(Collection<Long> ids) {
+        return answerRepository.findAllById(ids);
     }
 
     @Override
-    public AnswerDto updateAnswer(Long answerId, AnswerDto updatedAnswerDto) {
-        return null;
+    public Answer create(Answer dto) {
+        return answerRepository.save(dto);
     }
 
     @Override
-    public void deleteAnswer(Long AnswerId) {
-
+    public Answer patch(Answer id, JsonNode patchNode) {
+        return answerRepository.save(id);
     }
+
+    @Override
+    public void delete(Answer id) {
+        answerRepository.delete(id);
+    }
+
 }

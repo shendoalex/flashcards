@@ -1,19 +1,23 @@
 package ru.shendo.flashcards.service;
 
-import ru.shendo.flashcards.dto.CourseDto;
+import com.fasterxml.jackson.databind.JsonNode;
+import ru.shendo.flashcards.entity.Course;
 
+import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 
 public interface CourseService {
+    List<Course> getList();
 
-    CourseDto createCourse(CourseDto courseDto);
+    Optional<Course> getOne(Long id);
 
-    CourseDto findCourseById(Long courseId);
+    List<Course> getMany(Collection<Long> ids);
 
-    List<CourseDto> findAllCourses();
+    Course create(Course dto);
 
-    CourseDto updateCourse(Long courseId, CourseDto courseDto);
+    Course patch(Course id, JsonNode patchNode);
 
-    void deleteCourse(Long courseId);
+    void delete(Course id);
 
 }

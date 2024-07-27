@@ -16,7 +16,6 @@ import lombok.Setter;
 import lombok.ToString;
 import lombok.experimental.FieldDefaults;
 
-import java.util.Collection;
 import java.util.List;
 
 @Entity
@@ -28,7 +27,7 @@ import java.util.List;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @ToString(onlyExplicitlyIncluded = true)
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class UserEntity {
+public class User {
 
     @Id
     @Column(name = "id")
@@ -43,7 +42,7 @@ public class UserEntity {
     @Column(name = "username")
     String username;
 
-    @OneToMany(mappedBy = "owner")
-    List<CourseEntity> courses;
+    @OneToMany(mappedBy = "courseOwner")
+    List<Course> courses;
 
 }

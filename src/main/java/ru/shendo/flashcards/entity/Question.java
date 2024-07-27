@@ -18,7 +18,6 @@ import lombok.Setter;
 import lombok.ToString;
 import lombok.experimental.FieldDefaults;
 
-import java.util.Collection;
 import java.util.List;
 
 @Entity
@@ -30,7 +29,7 @@ import java.util.List;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @ToString(onlyExplicitlyIncluded = true)
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class QuestionEntity {
+public class Question {
 
     @Id
     @Column(name = "id")
@@ -40,16 +39,16 @@ public class QuestionEntity {
 
     @ToString.Include
     @Column(name = "question")
-    String question;
+    String questionText;
 
     @Column(name = "completed")
-    boolean completed;
+    boolean questionCompleted;
 
-    @OneToMany(mappedBy = "question")
-    List<AnswerEntity> answers;
+    @OneToMany(mappedBy = "answerQuestion")
+    List<Answer> questionAnswers;
 
     @ManyToOne
     @JoinColumn(name = "course_id", referencedColumnName = "id", nullable = false)
-    CourseEntity course;
+    Course course;
 
 }

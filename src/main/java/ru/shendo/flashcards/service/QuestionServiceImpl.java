@@ -1,51 +1,49 @@
 package ru.shendo.flashcards.service;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import ru.shendo.flashcards.dto.QuestionDto;
-import ru.shendo.flashcards.entity.QuestionEntity;
+import ru.shendo.flashcards.entity.Question;
 import ru.shendo.flashcards.repository.QuestionRepository;
 
+import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 
-@Service
-@Transactional
 @RequiredArgsConstructor
+@Service
 public class QuestionServiceImpl implements QuestionService {
 
-    public final QuestionRepository questionRepository;
+    private final QuestionRepository questionRepository;
 
-    @Transactional(readOnly = true)
-    public QuestionEntity findById(Long id) {
-
-        return null;
-
-
+    @Override
+    public List<Question> getList() {
+        return questionRepository.findAll();
     }
 
     @Override
-    public QuestionDto createQuestion(QuestionDto questionDto) {
-        return null;
+    public Optional<Question> getOne(Long id) {
+        return questionRepository.findById(id);
     }
 
     @Override
-    public QuestionDto findQuestionById(Long questionId) {
-        return null;
+    public List<Question> getMany(Collection<Long> ids) {
+        return questionRepository.findAllById(ids);
     }
 
     @Override
-    public List<QuestionDto> findAllQuestions() {
-        return List.of();
+    public Question create(Question dto) {
+        return questionRepository.save(dto);
     }
 
     @Override
-    public QuestionDto updateQuestion(Long questionId, QuestionDto questionDto) {
-        return null;
+    public Question patch(Question id, JsonNode patchNode) {
+        return questionRepository.save(id);
     }
 
     @Override
-    public void deleteQuestion(Long questionId) {
-
+    public void delete(Question id) {
+        questionRepository.delete(id);
     }
+
 }
