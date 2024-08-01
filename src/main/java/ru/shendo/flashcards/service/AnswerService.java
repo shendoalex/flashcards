@@ -1,19 +1,23 @@
 package ru.shendo.flashcards.service;
 
-import ru.shendo.flashcards.dto.AnswerDto;
+import com.fasterxml.jackson.databind.JsonNode;
+import ru.shendo.flashcards.entity.Answer;
 
+import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 
 public interface AnswerService {
+    List<Answer> getList();
 
-    AnswerDto createAnswer(AnswerDto answerDto);
+    Optional<Answer> getOne(Long id);
 
-    AnswerDto findAnswerById(Long employeeId);
+    List<Answer> getMany(Collection<Long> ids);
 
-    List<AnswerDto> findAllAnswers();
+    Answer create(Answer dto);
 
-    AnswerDto updateAnswer(Long answerId, AnswerDto updatedAnswerDto);
+    Answer patch(Answer id, JsonNode patchNode);
 
-    void deleteAnswer(Long AnswerId);
+    void delete(Answer id);
 
 }

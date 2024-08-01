@@ -5,6 +5,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
@@ -16,11 +18,10 @@ import lombok.Setter;
 import lombok.ToString;
 import lombok.experimental.FieldDefaults;
 
-import java.util.Collection;
 import java.util.List;
 
 @Entity
-@Table(name = "user_data", schema = "flashcards", catalog = "postgres")
+@Table(name = "question", schema = "flashcards", catalog = "postgres")
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
@@ -28,7 +29,7 @@ import java.util.List;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @ToString(onlyExplicitlyIncluded = true)
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class UserEntity {
+public class Question {
 
     @Id
     @Column(name = "id")
@@ -37,13 +38,17 @@ public class UserEntity {
     Long id;
 
     @ToString.Include
-    @Column(name = "email")
-    String email;
+    @Column(name = "question")
+    String questionText;
 
-    @Column(name = "username")
-    String username;
+    @Column(name = "completed")
+    boolean questionCompleted;
 
-    @OneToMany(mappedBy = "owner")
-    List<CourseEntity> courses;
+    @OneToMany(mappedBy = "answerQuestion")
+    List<Answer> questionAnswers;
+
+    @ManyToOne
+    @JoinColumn(name = "course_id", referencedColumnName = "id", nullable = false)
+    Course course;
 
 }

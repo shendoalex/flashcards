@@ -18,11 +18,10 @@ import lombok.Setter;
 import lombok.ToString;
 import lombok.experimental.FieldDefaults;
 
-import java.util.Collection;
 import java.util.List;
 
 @Entity
-@Table(name = "question", schema = "flashcards", catalog = "postgres")
+@Table(name = "course", schema = "flashcards", catalog = "postgres")
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
@@ -30,7 +29,7 @@ import java.util.List;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @ToString(onlyExplicitlyIncluded = true)
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class QuestionEntity {
+public class Course {
 
     @Id
     @Column(name = "id")
@@ -39,17 +38,14 @@ public class QuestionEntity {
     Long id;
 
     @ToString.Include
-    @Column(name = "question")
-    String question;
-
-    @Column(name = "completed")
-    boolean completed;
-
-    @OneToMany(mappedBy = "question")
-    List<AnswerEntity> answers;
+    @Column(name = "course_name")
+    String courseName;
 
     @ManyToOne
-    @JoinColumn(name = "course_id", referencedColumnName = "id", nullable = false)
-    CourseEntity course;
+    @JoinColumn(name = "owner_id", referencedColumnName = "id")
+    User courseOwner;
+
+    @OneToMany(mappedBy = "course")
+    List<Question> courseQuestions;
 
 }

@@ -1,14 +1,22 @@
 package ru.shendo.flashcards.mapper;
 
+import org.mapstruct.BeanMapping;
 import org.mapstruct.Mapper;
+import org.mapstruct.MappingConstants;
+import org.mapstruct.MappingTarget;
+import org.mapstruct.NullValuePropertyMappingStrategy;
+import org.mapstruct.ReportingPolicy;
 import ru.shendo.flashcards.dto.UserDto;
-import ru.shendo.flashcards.entity.UserEntity;
+import ru.shendo.flashcards.entity.User;
 
-@Mapper(componentModel = "spring")
+@Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE, componentModel = MappingConstants.ComponentModel.SPRING)
 public interface UserMapper {
+    User toEntity(UserDto userDto);
 
-    UserDto UserEntityToDto(UserEntity userEntity);
+    UserDto toDto(User user);
 
-    UserEntity UserDtoToEntity(UserDto userDto);
+    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+    User partialUpdate(UserDto userDto, @MappingTarget User user);
 
+    User updateWithNull(UserDto userDto, @MappingTarget User user);
 }

@@ -1,12 +1,14 @@
 package ru.shendo.flashcards.entity;
 
+import jakarta.persistence.CollectionTable;
 import jakarta.persistence.Column;
+import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
@@ -22,7 +24,7 @@ import java.util.Collection;
 import java.util.List;
 
 @Entity
-@Table(name = "course", schema = "flashcards", catalog = "postgres")
+@Table(name = "user_data", schema = "flashcards", catalog = "postgres")
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
@@ -30,7 +32,7 @@ import java.util.List;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @ToString(onlyExplicitlyIncluded = true)
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class CourseEntity {
+public class User {
 
     @Id
     @Column(name = "id")
@@ -39,14 +41,20 @@ public class CourseEntity {
     Long id;
 
     @ToString.Include
-    @Column(name = "course_name")
-    String name;
+    @Column(name = "email", nullable = false, unique = true)
+    String email;
 
-    @ManyToOne
-    @JoinColumn(name = "owner_id", referencedColumnName = "id")
-    UserEntity owner;
+    @Column(name = "username", nullable = false, unique = true)
+    String username;
 
-    @OneToMany(mappedBy = "course")
-    List<QuestionEntity> questions;
+    @Column(nullable = false)
+    private String password;
 
+    @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(name = "authorities", joinColumns = @JoinColumn(name = "user_id"))
+    @Column(name = "authority")
+    private Collection<String> authorities;
+
+    @OneToMany(mappedBy = "courseOwner")
+    List<Course> courses;
 }
