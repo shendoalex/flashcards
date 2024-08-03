@@ -8,20 +8,18 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.server.ResponseStatusException;
-import ru.shendo.flashcards.service.UserService;
 import ru.shendo.flashcards.dto.UserDto;
 import ru.shendo.flashcards.entity.User;
 import ru.shendo.flashcards.mapper.UserMapper;
 import ru.shendo.flashcards.repository.UserRepository;
+import ru.shendo.flashcards.service.UserService;
 
 import java.io.IOException;
-import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
@@ -39,12 +37,16 @@ public class UserController {
     private final ObjectMapper objectMapper;
 
     @GetMapping
-    public List<UserDto> getList() {
-        List<User> users = userService.getList();
-        List<UserDto> userDtos = users.stream()
+    public List<UserDto> getList(@RequestParam(required = false) List<Long> ids) {
+        List<User> users;
+        if (ids == null || ids.isEmpty()) {
+            users = userService.getList();
+        } else {
+            users = userService.getMany(ids);
+        }
+        return users.stream()
                 .map(userMapper::toDto)
                 .toList();
-        return userDtos;
     }
 
     @GetMapping("/{id}")
@@ -54,13 +56,6 @@ public class UserController {
                 new ResponseStatusException(HttpStatus.NOT_FOUND, "Пользователь с id `%s` не найден".formatted(id))));
         return userDto;
     }
-
-//    @PostMapping
-//    public UserDto create(@RequestBody UserDto dto) {
-//        User user = userMapper.toEntity(dto);
-//        User resultUser = userService.create(user);
-//        return userMapper.toDto(resultUser);
-//    }
 
     @PatchMapping("/{id}")
     public UserDto patch(@PathVariable Long id, @RequestBody JsonNode patchNode) throws IOException {
