@@ -1,21 +1,13 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Register</title>
-    <!-- Подключение Bootstrap CSS -->
+    <title>Регистрация</title>
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
 <div class="container">
-    <h1 class="mt-5">Register</h1>
-    <form th:action="@{/register}" th:object="${user}" method="post" class="mt-3" id="registerForm" novalidate>
-        <div class="form-group">
-            <label for="email">Email:</label>
-            <input type="email" class="form-control" id="email" name="email" th:field="*{email}" required pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"/>
-            <div class="invalid-feedback">
-                Please enter a valid email address.
-            </div>
-        </div>
+    <h1 class="mt-5">Регистрация</h1>
+    <form th:action="@{/login}" th:object="${user}" method="post" class="mt-3" id="loginForm" novalidate>
         <div class="form-group">
             <label for="username">Username:</label>
             <input type="text" class="form-control" id="username" name="username" th:field="*{username}" required/>
@@ -31,26 +23,25 @@
             </div>
         </div>
         <div>
-            <button type="submit" class="btn btn-primary">Register</button>
+            <button type="submit" class="btn btn-primary">Войти</button>
         </div>
     </form>
-    <div th:if="${param.success}" class="alert alert-success mt-3">
-        <p>Registration successful!</p>
-    </div>
     <div th:if="${param.error}" class="alert alert-danger mt-3">
-        <p>There was an error with your registration. Please try again.</p>
+        <p>Invalid username or password. Please try again.</p>
+        <p>Неправильный пароль или пользователь не зарегистрирован.</p>
+    </div>
+    <div class="mt-3">
+        <p><a th:href="@{/register}">Зарегистрироваться</a></p>
     </div>
 </div>
-<!-- Подключение Bootstrap JS и зависимостей -->
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 <script>
-    // JavaScript для валидации формы
     (function() {
         'use strict';
         window.addEventListener('load', function() {
-            var form = document.getElementById('registerForm');
+            var form = document.getElementById('loginForm');
             form.addEventListener('submit', function(event) {
                 if (form.checkValidity() === false) {
                     event.preventDefault();
