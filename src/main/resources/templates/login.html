@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Регистрация</title>
+    <title>Вход в систему</title>
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
 <div class="container">
-    <h1 class="mt-5">Регистрация</h1>
+    <h1 class="mt-5">Вход в систему</h1>
     <form th:action="@{/login}" th:object="${user}" method="post" class="mt-3" id="loginForm" novalidate>
         <div class="form-group">
             <label for="username">Username:</label>
