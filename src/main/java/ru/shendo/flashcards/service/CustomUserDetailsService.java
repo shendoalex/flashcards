@@ -25,7 +25,8 @@ public class CustomUserDetailsService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = userRepository.findByUsername(username)
-                .orElseThrow(() -> new UsernameNotFoundException("User not found with username: " + username));
+                .orElseThrow(() -> new UsernameNotFoundException(
+                        "Пользователь с таким именем не найден: " + username));
 
         return org.springframework.security.core.userdetails.User.builder()
                 .username(user.getUsername())
@@ -42,14 +43,14 @@ public class CustomUserDetailsService implements UserDetailsService {
     public User registerNewUser(UserRegistrationDto registrationDto) {
         if (userRepository.findByUsername(registrationDto.getUsername()).isPresent() ||
                 userRepository.findByEmail(registrationDto.getEmail()).isPresent()) {
-            throw new IllegalArgumentException("User with this email or username already exists");
+            throw new IllegalArgumentException("Пользователь с таким именем уже существует");
         }
 
         User user = new User();
         user.setEmail(registrationDto.getEmail());
         user.setUsername(registrationDto.getUsername());
         user.setPassword(passwordEncoder.encode(registrationDto.getPassword()));
-        user.setAuthorities(List.of("USER")); // Установите роли по умолчанию
+        user.setAuthorities(List.of("USER")); // Роль по умолчанию
 
         return userRepository.save(user);
     }

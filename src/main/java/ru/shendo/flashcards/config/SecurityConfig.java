@@ -27,7 +27,7 @@ public class SecurityConfig {
                         .anyRequest().authenticated() // Все остальные запросы требуют аутентификации
                 )
                 .formLogin((form) -> form
-                        .loginPage("/login") // Ваша кастомная страница логина
+                        .loginPage("/login") // Страница логина
                         .defaultSuccessUrl("/swagger-ui/index.html", true) // Перенаправление на Swagger UI после успешной авторизации
                         .failureUrl("/login?error=true") // Перенаправление на страницу логина с параметром error
                         .permitAll()
