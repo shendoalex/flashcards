@@ -38,12 +38,16 @@ public class CourseController {
     private final ObjectMapper objectMapper;
 
     @GetMapping
-    public List<CourseDto> getList() {
-        List<Course> courses = courseService.getList();
-        List<CourseDto> courseDtos = courses.stream()
+    public List<CourseDto> getList(@RequestParam(required = false) List<Long> ids) {
+        List<Course> courses;
+        if (ids == null || ids.isEmpty()) {
+            courses = courseService.getList();
+        } else {
+            courses = courseService.getMany(ids);
+        }
+        return courses.stream()
                 .map(courseMapper::toDto)
                 .toList();
-        return courseDtos;
     }
 
     @GetMapping("/{id}")
@@ -52,15 +56,6 @@ public class CourseController {
         CourseDto courseDto = courseMapper.toDto(courseOptional.orElseThrow(() ->
                 new ResponseStatusException(HttpStatus.NOT_FOUND, "Курс с id `%s` не найден".formatted(id))));
         return courseDto;
-    }
-
-    @GetMapping("/by-ids")
-    public List<CourseDto> getMany(@RequestParam List<Long> ids) {
-        List<Course> courses = courseService.getMany(ids);
-        List<CourseDto> courseDtos = courses.stream()
-                .map(courseMapper::toDto)
-                .toList();
-        return courseDtos;
     }
 
     @PostMapping

@@ -38,12 +38,16 @@ public class QuestionController {
     private final ObjectMapper objectMapper;
 
     @GetMapping
-    public List<QuestionDto> getList() {
-        List<Question> questions = questionService.getList();
-        List<QuestionDto> questionDtos = questions.stream()
+    public List<QuestionDto> getList(@RequestParam(required = false) List<Long> ids) {
+        List<Question> questions;
+        if (ids == null || ids.isEmpty()) {
+            questions = questionService.getList();
+        } else {
+            questions = questionService.getMany(ids);
+        }
+        return questions.stream()
                 .map(questionMapper::toDto)
                 .toList();
-        return questionDtos;
     }
 
     @GetMapping("/{id}")
@@ -52,15 +56,6 @@ public class QuestionController {
         QuestionDto questionDto = questionMapper.toDto(questionOptional.orElseThrow(() ->
                 new ResponseStatusException(HttpStatus.NOT_FOUND, "Вопрос с id `%s` не найден".formatted(id))));
         return questionDto;
-    }
-
-    @GetMapping("/by-ids")
-    public List<QuestionDto> getMany(@RequestParam List<Long> ids) {
-        List<Question> questions = questionService.getMany(ids);
-        List<QuestionDto> questionDtos = questions.stream()
-                .map(questionMapper::toDto)
-                .toList();
-        return questionDtos;
     }
 
     @PostMapping

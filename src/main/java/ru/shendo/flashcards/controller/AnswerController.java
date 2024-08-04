@@ -38,12 +38,16 @@ public class AnswerController {
     private final ObjectMapper objectMapper;
 
     @GetMapping
-    public List<AnswerDto> getList() {
-        List<Answer> answers = answerService.getList();
-        List<AnswerDto> answerDtos = answers.stream()
+    public List<AnswerDto> getList(@RequestParam(required = false) List<Long> ids) {
+        List<Answer> answers;
+        if (ids == null || ids.isEmpty()) {
+            answers = answerService.getList();
+        } else {
+            answers = answerService.getMany(ids);
+        }
+        return answers.stream()
                 .map(answerMapper::toDto)
                 .toList();
-        return answerDtos;
     }
 
     @GetMapping("/{id}")
@@ -51,17 +55,8 @@ public class AnswerController {
         Optional<Answer> answerOptional = answerService.getOne(id);
         AnswerDto answerDto = answerMapper
                 .toDto(answerOptional.orElseThrow(() ->
-                new ResponseStatusException(HttpStatus.NOT_FOUND, "Ответ с id `%s` не найден".formatted(id))));
+                        new ResponseStatusException(HttpStatus.NOT_FOUND, "Ответ с id `%s` не найден".formatted(id))));
         return answerDto;
-    }
-
-    @GetMapping("/by-ids")
-    public List<AnswerDto> getMany(@RequestParam List<Long> ids) {
-        List<Answer> answers = answerService.getMany(ids);
-        List<AnswerDto> answerDtos = answers.stream()
-                .map(answerMapper::toDto)
-                .toList();
-        return answerDtos;
     }
 
     @PostMapping

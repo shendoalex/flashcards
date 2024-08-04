@@ -1,0 +1,103 @@
+<databaseChangeLog xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+
+    <changeSet id="v1-1" author="Aleksei Shendo">
+        <insert
+                schemaName="flashcards"
+                tableName="question">
+            <column name="question" value="Какие преимущества у ООП?"/>
+            <column name="course_id" valueNumeric="1"/>
+        </insert>
+    </changeSet>
+
+    <changeSet id="v1-2" author="Aleksei Shendo">
+        <insert
+                schemaName="flashcards"
+                tableName="question">
+            <column name="question" value="Какие недостатки у ООП?"/>
+            <column name="course_id" valueNumeric="1"/>
+        </insert>
+
+        <insert
+                schemaName="flashcards"
+                tableName="question">
+            <column name="question" value="Принципы ООП (наследование, инкапсуляция, полиморфизм, абстракция)"/>
+            <column name="course_id" valueNumeric="1"/>
+        </insert>
+
+        <insert
+                schemaName="flashcards"
+                tableName="question">
+            <column name="question" value="Что такое класс, объект, интерфейс?"/>
+            <column name="course_id" valueNumeric="1"/>
+        </insert>
+
+        <insert
+                schemaName="flashcards"
+                tableName="question">
+            <column name="question" value="Что такое ассоциация, агрегация, композиция?"/>
+            <column name="course_id" valueNumeric="1"/>
+        </insert>
+
+        <insert
+                schemaName="flashcards"
+                tableName="question">
+            <column name="question" value="Является – «is a», имеет – «has a» как ты это понимаешь?"/>
+            <column name="course_id" valueNumeric="1"/>
+        </insert>
+
+        <insert
+                schemaName="flashcards"
+                tableName="question">
+            <column name="question" value="Расскажи про статическое и динамическое связывание?"/>
+            <column name="course_id" valueNumeric="1"/>
+        </insert>
+
+        <insert
+                schemaName="flashcards"
+                tableName="question">
+            <column name="question" value="Расскажи про принципы SOLID?"/>
+            <column name="course_id" valueNumeric="1"/>
+        </insert>
+
+        <insert
+                schemaName="flashcards"
+                tableName="question">
+            <column name="question" value="Какая основная идея языка Java?"/>
+            <column name="course_id" valueNumeric="1"/>
+        </insert>
+
+        <insert
+                schemaName="flashcards"
+                tableName="question">
+            <column name="question" value="За счет чего обеспечивается кроссплатформенность программируя на языке Java?"/>
+            <column name="course_id" valueNumeric="1"/>
+        </insert>
+
+        <insert
+                schemaName="flashcards"
+                tableName="question">
+            <column name="question" value="Какие преимущества у Java?"/>
+            <column name="course_id" valueNumeric="1"/>
+        </insert>
+
+        <insert
+                schemaName="flashcards"
+                tableName="question">
+            <column name="question" value="Что такое JDK? Что в него входит?"/>
+            <column name="course_id" valueNumeric="1"/>
+        </insert>
+    </changeSet>
+
+    <changeSet id="v1-3" author="Aleksei Shendo">
+        <insert
+                schemaName="flashcards"
+                tableName="question">
+            <column name="question" value="Что такое JRE? Что в него входит?"/>
+            <column name="course_id" valueNumeric="1"/>
+        </insert>
+    </changeSet>
+
+</databaseChangeLog>
