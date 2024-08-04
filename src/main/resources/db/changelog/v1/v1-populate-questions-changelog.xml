@@ -72,7 +72,8 @@
         <insert
                 schemaName="flashcards"
                 tableName="question">
-            <column name="question" value="За счет чего обеспечивается кроссплатформенность программируя на языке Java?"/>
+            <column name="question"
+                    value="За счет чего обеспечивается кроссплатформенность программируя на языке Java?"/>
             <column name="course_id" valueNumeric="1"/>
         </insert>
 
