@@ -2,6 +2,8 @@ package ru.shendo.flashcards.service;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import ru.shendo.flashcards.entity.Answer;
 import ru.shendo.flashcards.repository.AnswerRepository;
@@ -44,6 +46,11 @@ public class AnswerServiceImpl implements AnswerService {
     @Override
     public void delete(Answer id) {
         answerRepository.delete(id);
+    }
+
+    @Override
+    public Page<Answer> getList(Pageable pageable) {
+        return answerRepository.findAll(pageable);
     }
 
 }

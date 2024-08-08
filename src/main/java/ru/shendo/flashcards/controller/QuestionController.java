@@ -3,6 +3,11 @@ package ru.shendo.flashcards.controller;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -38,16 +43,23 @@ public class QuestionController {
     private final ObjectMapper objectMapper;
 
     @GetMapping
-    public List<QuestionDto> getList(@RequestParam(required = false) List<Long> ids) {
-        List<Question> questions;
+    public Page<QuestionDto> getList(
+            @RequestParam(required = false) List<Long> ids,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "id") String sortBy) {
+
+        Pageable pageable = PageRequest.of(page, size, Sort.by(sortBy));
+        Page<Question> questions;
+
         if (ids == null || ids.isEmpty()) {
-            questions = questionService.getList();
+            questions = questionService.getList(pageable);
         } else {
-            questions = questionService.getMany(ids);
+            List<Question> questionList = questionService.getMany(ids);
+            questions = new PageImpl<>(questionList, pageable, questionList.size());
         }
-        return questions.stream()
-                .map(questionMapper::toDto)
-                .toList();
+
+        return questions.map(questionMapper::toDto);
     }
 
     @GetMapping("/{id}")

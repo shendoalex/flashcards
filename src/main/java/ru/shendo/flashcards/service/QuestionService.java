@@ -1,6 +1,8 @@
 package ru.shendo.flashcards.service;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import ru.shendo.flashcards.entity.Question;
 
 import java.util.Collection;
@@ -19,5 +21,7 @@ public interface QuestionService {
     Question patch(Question id, JsonNode patchNode);
 
     void delete(Question id);
+
+    Page<Question> getList(Pageable pageable);
 
 }

@@ -3,6 +3,11 @@ package ru.shendo.flashcards.controller;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -37,16 +42,23 @@ public class UserController {
     private final ObjectMapper objectMapper;
 
     @GetMapping
-    public List<UserDto> getList(@RequestParam(required = false) List<Long> ids) {
-        List<User> users;
+    public Page<UserDto> getList(
+            @RequestParam(required = false) List<Long> ids,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "id") String sortBy) {
+
+        Pageable pageable = PageRequest.of(page, size, Sort.by(sortBy));
+        Page<User> users;
+
         if (ids == null || ids.isEmpty()) {
-            users = userService.getList();
+            users = userService.getList(pageable);
         } else {
-            users = userService.getMany(ids);
+            List<User> userList = userService.getMany(ids);
+            users = new PageImpl<>(userList, pageable, userList.size());
         }
-        return users.stream()
-                .map(userMapper::toDto)
-                .toList();
+
+        return users.map(userMapper::toDto);
     }
 
     @GetMapping("/{id}")

@@ -3,16 +3,13 @@ package ru.shendo.flashcards.controller;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import ru.shendo.flashcards.dto.CourseDto;
 import ru.shendo.flashcards.entity.Course;
@@ -30,32 +27,35 @@ import java.util.Optional;
 public class CourseController {
 
     private final CourseService courseService;
-
     private final CourseMapper courseMapper;
-
     private final CourseRepository courseRepository;
-
     private final ObjectMapper objectMapper;
 
     @GetMapping
-    public List<CourseDto> getList(@RequestParam(required = false) List<Long> ids) {
-        List<Course> courses;
+    public Page<CourseDto> getList(
+            @RequestParam(required = false) List<Long> ids,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "id") String sortBy) {
+
+        Pageable pageable = PageRequest.of(page, size, Sort.by(sortBy));
+        Page<Course> courses;
+
         if (ids == null || ids.isEmpty()) {
-            courses = courseService.getList();
+            courses = courseService.getList(pageable);
         } else {
-            courses = courseService.getMany(ids);
+            List<Course> courseList = courseService.getMany(ids);
+            courses = new PageImpl<>(courseList, pageable, courseList.size());
         }
-        return courses.stream()
-                .map(courseMapper::toDto)
-                .toList();
+
+        return courses.map(courseMapper::toDto);
     }
 
     @GetMapping("/{id}")
     public CourseDto getOne(@PathVariable Long id) {
-        Optional<Course> courseOptional = courseService.getOne(id);
-        CourseDto courseDto = courseMapper.toDto(courseOptional.orElseThrow(() ->
-                new ResponseStatusException(HttpStatus.NOT_FOUND, "Курс с id `%s` не найден".formatted(id))));
-        return courseDto;
+        Course course = courseService.getOne(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Курс с id `%s` не найден".formatted(id)));
+        return courseMapper.toDto(course);
     }
 
     @PostMapping
@@ -67,8 +67,8 @@ public class CourseController {
 
     @PatchMapping("/{id}")
     public CourseDto patch(@PathVariable Long id, @RequestBody JsonNode patchNode) throws IOException {
-        Course course = courseRepository.findById(id).orElseThrow(() ->
-                new ResponseStatusException(HttpStatus.NOT_FOUND, "Курс с id `%s` не найден".formatted(id)));
+        Course course = courseRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Курс с id `%s` не найден".formatted(id)));
 
         CourseDto courseDto = courseMapper.toDto(course);
         objectMapper.readerForUpdating(courseDto).readValue(patchNode);
@@ -86,5 +86,4 @@ public class CourseController {
         }
         return courseMapper.toDto(course);
     }
-
 }

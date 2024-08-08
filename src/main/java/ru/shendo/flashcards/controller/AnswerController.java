@@ -3,16 +3,13 @@ package ru.shendo.flashcards.controller;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import ru.shendo.flashcards.dto.AnswerDto;
 import ru.shendo.flashcards.entity.Answer;
@@ -30,33 +27,32 @@ import java.util.Optional;
 public class AnswerController {
 
     private final AnswerService answerService;
-
     private final AnswerMapper answerMapper;
-
     private final AnswerRepository answerRepository;
-
     private final ObjectMapper objectMapper;
 
     @GetMapping
-    public List<AnswerDto> getList(@RequestParam(required = false) List<Long> ids) {
-        List<Answer> answers;
+    public Page<AnswerDto> getList(
+            @RequestParam(required = false) List<Long> ids,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "id") String sortBy) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by(sortBy));
+        Page<Answer> answers;
         if (ids == null || ids.isEmpty()) {
-            answers = answerService.getList();
+            answers = answerService.getList(pageable);
         } else {
-            answers = answerService.getMany(ids);
+            List<Answer> answerList = answerService.getMany(ids);
+            answers = new PageImpl<>(answerList, pageable, answerList.size());
         }
-        return answers.stream()
-                .map(answerMapper::toDto)
-                .toList();
+        return answers.map(answerMapper::toDto);
     }
 
     @GetMapping("/{id}")
     public AnswerDto getOne(@PathVariable Long id) {
-        Optional<Answer> answerOptional = answerService.getOne(id);
-        AnswerDto answerDto = answerMapper
-                .toDto(answerOptional.orElseThrow(() ->
-                        new ResponseStatusException(HttpStatus.NOT_FOUND, "Ответ с id `%s` не найден".formatted(id))));
-        return answerDto;
+        Answer answer = answerService.getOne(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Ответ с id `%s` не найден".formatted(id)));
+        return answerMapper.toDto(answer);
     }
 
     @PostMapping
@@ -68,8 +64,8 @@ public class AnswerController {
 
     @PatchMapping("/{id}")
     public AnswerDto patch(@PathVariable Long id, @RequestBody JsonNode patchNode) throws IOException {
-        Answer answer = answerRepository.findById(id).orElseThrow(() ->
-                new ResponseStatusException(HttpStatus.NOT_FOUND, "Ответ с id `%s` не найден".formatted(id)));
+        Answer answer = answerRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Ответ с id `%s` не найден".formatted(id)));
 
         AnswerDto answerDto = answerMapper.toDto(answer);
         objectMapper.readerForUpdating(answerDto).readValue(patchNode);
@@ -87,5 +83,4 @@ public class AnswerController {
         }
         return answerMapper.toDto(answer);
     }
-
 }

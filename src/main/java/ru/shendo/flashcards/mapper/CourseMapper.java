@@ -12,7 +12,7 @@ import ru.shendo.flashcards.dto.CourseDto;
 import ru.shendo.flashcards.entity.Course;
 import ru.shendo.flashcards.entity.User;
 
-@Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE, componentModel = MappingConstants.ComponentModel.SPRING)
+@Mapper(componentModel = MappingConstants.ComponentModel.SPRING)
 public interface CourseMapper {
     @Mapping(source = "courseOwnerId", target = "courseOwner.id")
     Course toEntity(CourseDto courseDto);
